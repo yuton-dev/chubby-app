@@ -54,7 +54,11 @@ export default function MasterModal({ open, onClose, onCreated }: MasterModalPro
 
   return (
     <div className="fixed inset-0 z-20 flex items-center justify-center bg-black/40 p-4">
-      <form onSubmit={handleSubmit} className="w-full max-w-md rounded-lg bg-white p-4">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-md rounded-lg p-4"
+        style={{ border: "1px solid var(--border-soft)", background: "var(--surface)" }}
+      >
         <h2 className="mb-3 text-lg font-semibold">Master作成</h2>
 
         {/* 名前 */}
@@ -99,7 +103,8 @@ export default function MasterModal({ open, onClose, onCreated }: MasterModalPro
           <button
             type="submit"
             disabled={isSubmitting}
-            className="rounded-md bg-black px-3 py-1.5 text-white disabled:opacity-60"
+            className="rounded-md px-3 py-1.5 text-white disabled:opacity-60"
+            style={{ background: "var(--primary-strong)" }}
           >
             {isSubmitting ? "作成中..." : "作成"}
           </button>

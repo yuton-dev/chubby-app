@@ -15,11 +15,12 @@ export default function MastersPage() {
       <Header />
       <main className="mx-auto w-full max-w-4xl px-4 py-6">
         <div className="mb-4 flex items-center justify-between">
-          <h1 className="text-xl font-semibold">Master一覧</h1>
+          <h1 className="text-xl font-semibold">マスター一覧</h1>
           <button
             type="button"
             onClick={() => setModalOpen(true)}
-            className="rounded-md bg-black px-3 py-1.5 text-white"
+            className="rounded-md px-3 py-1.5 text-white"
+            style={{ background: "var(--primary-strong)" }}
           >
             新規作成
           </button>

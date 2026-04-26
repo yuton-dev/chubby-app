@@ -21,7 +21,8 @@ export default function ListItem({ title, description, href, onClick }: ListItem
     return (
       <Link
         href={href}
-        className="block rounded-md border border-black/10 bg-white px-3 py-2 text-left hover:bg-black/5"
+        className="block rounded-md border px-3 py-2 text-left transition-colors"
+        style={{ borderColor: "var(--border-soft)", background: "var(--surface)" }}
       >
         <ItemBody title={title} description={description} />
       </Link>
@@ -32,7 +33,8 @@ export default function ListItem({ title, description, href, onClick }: ListItem
     <button
       type="button"
       onClick={onClick}
-      className="block w-full rounded-md border border-black/10 bg-white px-3 py-2 text-left hover:bg-black/5"
+      className="block w-full rounded-md border px-3 py-2 text-left transition-colors"
+      style={{ borderColor: "var(--border-soft)", background: "var(--surface)" }}
     >
       <ItemBody title={title} description={description} />
     </button>

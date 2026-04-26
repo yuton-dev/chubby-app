@@ -2,7 +2,14 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #3f3024;
+  --primary: #d9b38c;
+  --primary-strong: #c49a70;
+  --primary-soft: #f3e1cf;
+  --secondary: #e8a09a;
+  --secondary-soft: #f6d8d5;
+  --border-soft: #e8d8c7;
+  --surface: #ffffff;
 }
 
 @theme inline {

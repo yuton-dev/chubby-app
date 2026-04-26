@@ -4,6 +4,7 @@ import {
   type CreateChubbyInput,
   type CreateFeedInput,
   type CreateMasterInput,
+  type DeleteFeedInput,
   type Feed,
   type Master,
   type MealType
@@ -73,21 +74,60 @@ function mapChubby(item: unknown): Chubby {
 
 function mapFeed(item: unknown, index: number): Feed {
   const record = toRecord(item);
-  const id = toStringValue(record.id ?? record.feedId, `feed-${index}`);
-  const chubbyId = toStringValue(record.chubbyId ?? record.chubby_id);
-  const name = toStringValue(record.name ?? record.feedName, "ごはん");
-  const rawMealType = toStringValue(record.mealType ?? record.feedType ?? record.kubun);
+  const id = toStringValue(
+    record.id ?? toRecord(record.id).S ?? record.feedId ?? toRecord(record.feedId).S,
+    `feed-${index}`
+  );
+  const chubbyId = toStringValue(
+    record.chubbyId ?? toRecord(record.chubbyId).S ?? record.chubby_id ?? toRecord(record.chubby_id).S
+  );
+  const name = toStringValue(
+    record.name ?? toRecord(record.name).S ?? record.feedName ?? toRecord(record.feedName).S,
+    "ごはん"
+  );
+  const rawMealType = toStringValue(
+    record.mealType ??
+      toRecord(record.mealType).S ??
+      record.feedType ??
+      toRecord(record.feedType).S ??
+      record.kubun ??
+      toRecord(record.kubun).S
+  );
   const mealType = rawMealType ? (rawMealType as MealType) : undefined;
-  const caloriesRaw = record.calories ?? record.kcal;
+  const caloriesRaw =
+    record.calories ??
+    toRecord(record.calories).N ??
+    record.kcal ??
+    toRecord(record.kcal).N;
   const calories =
     typeof caloriesRaw === "number"
       ? caloriesRaw
       : typeof caloriesRaw === "string"
         ? Number(caloriesRaw)
         : undefined;
-  const masterId = toStringValue(record.masterId ?? record.masterPersonId);
-  const masterName = toStringValue(record.masterName ?? record.masterPersonName ?? record.from);
-  const date = toStringValue(record.date ?? record.createdAt ?? record.created_at, new Date().toISOString());
+  const masterId = toStringValue(
+    record.masterId ??
+      toRecord(record.masterId).S ??
+      record.masterPersonId ??
+      toRecord(record.masterPersonId).S
+  );
+  const masterName = toStringValue(
+    record.masterName ??
+      toRecord(record.masterName).S ??
+      record.masterPersonName ??
+      toRecord(record.masterPersonName).S ??
+      record.from ??
+      toRecord(record.from).S
+  );
+  const date = toStringValue(
+    record.date ??
+      toRecord(record.date).S ??
+      record.createdAt ??
+      toRecord(record.createdAt).S ??
+      record.created_at ??
+      toRecord(record.created_at).S,
+    new Date().toISOString()
+  );
 
   return {
     id,
@@ -218,4 +258,21 @@ export async function createFeed(input: CreateFeedInput): Promise<Feed> {
     masterName: created.masterName || input.masterName,
     date: created.date || input.date
   };
+}
+
+export async function deleteFeedRireki(input: DeleteFeedInput): Promise<void> {
+  const sk = input.feedId.startsWith("FEED#") ? input.feedId : `FEED#${input.date}`;
+  await request<unknown>("/deleteFeedRireki", {
+    method: "POST",
+    body: {
+      // Preferred payload
+      chubbyId: input.chubbyId,
+      feedId: input.feedId,
+      date: input.date,
+      // Backward compatibility aliases
+      chubbyPersonId: input.chubbyId,
+      id: input.feedId,
+      sk
+    }
+  });
 }

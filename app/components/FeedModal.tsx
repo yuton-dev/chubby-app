@@ -16,6 +16,12 @@ function todayLocalDate() {
   return new Date().toISOString().slice(0, 10);
 }
 
+function buildFeedDateKey(selectedDate: string) {
+  const now = new Date();
+  const timePart = now.toISOString().slice(11);
+  return `${selectedDate}T${timePart}`;
+}
+
 const mealTypeLabel: Record<MealType, string> = {
   breakfast: "朝",
   lunch: "昼",
@@ -59,7 +65,7 @@ export default function FeedModal({ open, chubbyId, onClose, onCreated }: FeedMo
         calories: calorieValue,
         masterId: fromWho === SELF_OPTION ? chubbyId : fromWho,
         masterName: undefined,
-        date
+        date: buildFeedDateKey(date)
       });
       onCreated?.(feed);
       setName("");
@@ -79,7 +85,11 @@ export default function FeedModal({ open, chubbyId, onClose, onCreated }: FeedMo
 
   return (
     <div className="fixed inset-0 z-20 flex items-center justify-center bg-black/40 p-4">
-      <form onSubmit={handleSubmit} className="w-full max-w-md rounded-lg bg-white p-4">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-md rounded-lg p-4"
+        style={{ border: "1px solid var(--border-soft)", background: "var(--surface)" }}
+      >
         <h2 className="mb-3 text-lg font-semibold">ごはん登録</h2>
         <input
           value={name}
@@ -113,7 +123,7 @@ export default function FeedModal({ open, chubbyId, onClose, onCreated }: FeedMo
           onChange={(e) => setFromWho(e.target.value)}
           className="mb-3 w-full rounded-md border border-black/20 px-3 py-2"
         >
-          <option value={SELF_OPTION}>自身</option>
+          <option value={SELF_OPTION}>自分</option>
           {masters.map((master) => (
             <option key={master.id} value={master.id}>
               {master.name}
@@ -138,7 +148,8 @@ export default function FeedModal({ open, chubbyId, onClose, onCreated }: FeedMo
           <button
             type="submit"
             disabled={isSubmitting}
-            className="rounded-md bg-black px-3 py-1.5 text-white disabled:opacity-60"
+            className="rounded-md px-3 py-1.5 text-white disabled:opacity-60"
+            style={{ background: "var(--primary-strong)" }}
           >
             {isSubmitting ? "登録中..." : "登録"}
           </button>

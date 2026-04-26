@@ -57,3 +57,9 @@ export type CreateFeedInput = {
   masterName?: string;
   date: string;
 };
+
+export type DeleteFeedInput = {
+  chubbyId: string;
+  feedId: string;
+  date: string;
+};

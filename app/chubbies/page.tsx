@@ -15,11 +15,12 @@ export default function ChubbiesPage() {
       <Header />
       <main className="mx-auto w-full max-w-4xl px-4 py-6">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-          <h1 className="text-xl font-semibold">Chubby一覧</h1>
+          <h1 className="text-xl font-semibold">でぶ一覧</h1>
           <button
             type="button"
             onClick={() => setModalOpen(true)}
-            className="rounded-md bg-black px-3 py-1.5 text-white"
+            className="rounded-md px-3 py-1.5 text-white"
+            style={{ background: "var(--primary-strong)" }}
           >
             新規作成
           </button>
