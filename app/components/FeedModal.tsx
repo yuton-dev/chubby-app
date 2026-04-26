@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { createFeed } from "../lib/api";
-import type { Feed } from "../lib/types";
+import { MEAL_TYPES, type Feed, type MealType } from "../lib/types";
+import { useMasters } from "../hooks/useMasters";
 
 type FeedModalProps = {
   open: boolean;
@@ -15,26 +16,56 @@ function todayLocalDate() {
   return new Date().toISOString().slice(0, 10);
 }
 
+const mealTypeLabel: Record<MealType, string> = {
+  breakfast: "朝",
+  lunch: "昼",
+  dinner: "夜",
+  snack: "おやつ"
+};
+
+const SELF_OPTION = "__self__";
+
 export default function FeedModal({ open, chubbyId, onClose, onCreated }: FeedModalProps) {
   const [name, setName] = useState("");
+  const [mealType, setMealType] = useState<MealType>("lunch");
+  const [calories, setCalories] = useState("");
+  const [fromWho, setFromWho] = useState(SELF_OPTION);
   const [date, setDate] = useState(todayLocalDate());
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { masters } = useMasters();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!name.trim()) return;
+    const trimmedName = name.trim();
+    const calorieValue = Number(calories);
+
+    if (!trimmedName) {
+      setError("名前は必須です。");
+      return;
+    }
+    if (!Number.isFinite(calorieValue) || calorieValue < 0) {
+      setError("カロリーは0以上の数値を入力してください。");
+      return;
+    }
 
     setIsSubmitting(true);
     setError(null);
     try {
       const feed = await createFeed({
         chubbyId,
-        name: name.trim(),
-        date: new Date(`${date}T00:00:00`).toISOString()
+        name: trimmedName,
+        mealType,
+        calories: calorieValue,
+        masterId: fromWho === SELF_OPTION ? chubbyId : fromWho,
+        masterName: undefined,
+        date
       });
       onCreated?.(feed);
       setName("");
+      setMealType("lunch");
+      setCalories("");
+      setFromWho(SELF_OPTION);
       setDate(todayLocalDate());
       onClose();
     } catch (err) {
@@ -53,9 +84,42 @@ export default function FeedModal({ open, chubbyId, onClose, onCreated }: FeedMo
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="食べたもの"
+          placeholder="ご飯の名前"
           className="mb-3 w-full rounded-md border border-black/20 px-3 py-2"
         />
+        <select
+          value={mealType}
+          onChange={(e) => setMealType(e.target.value as MealType)}
+          className="mb-3 w-full rounded-md border border-black/20 px-3 py-2"
+        >
+          {MEAL_TYPES.map((type) => (
+            <option key={type} value={type}>
+              {mealTypeLabel[type]}
+            </option>
+          ))}
+        </select>
+        <input
+          type="number"
+          inputMode="numeric"
+          min="0"
+          step="1"
+          value={calories}
+          onChange={(e) => setCalories(e.target.value)}
+          placeholder="カロリー"
+          className="mb-3 w-full rounded-md border border-black/20 px-3 py-2"
+        />
+        <select
+          value={fromWho}
+          onChange={(e) => setFromWho(e.target.value)}
+          className="mb-3 w-full rounded-md border border-black/20 px-3 py-2"
+        >
+          <option value={SELF_OPTION}>自身</option>
+          {masters.map((master) => (
+            <option key={master.id} value={master.id}>
+              {master.name}
+            </option>
+          ))}
+        </select>
         <input
           type="date"
           value={date}
