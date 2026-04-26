@@ -53,6 +53,9 @@ export default function ChubbyModal({
         style={{ border: "1px solid var(--border-soft)", background: "var(--surface)" }}
       >
         <h2 className="mb-3 text-lg font-semibold">Chubby作成</h2>
+        <label className="mb-1 block text-sm font-medium">
+          名前
+        </label>
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -60,6 +63,9 @@ export default function ChubbyModal({
           className="mb-3 w-full rounded-md border border-black/20 px-3 py-2"
         />
         {/* 性別 */}
+        <label className="mb-1 block text-sm font-medium">
+          性別
+        </label>
         <select
           value={sex}
           onChange={(e) => setSex(e.target.value)}
@@ -72,6 +78,9 @@ export default function ChubbyModal({
         </select>
 
         {/* 生年月日 */}
+        <label className="mb-1 block text-sm font-medium">
+          生年月日
+        </label>
         <input
           type="date"
           value={birthDay}

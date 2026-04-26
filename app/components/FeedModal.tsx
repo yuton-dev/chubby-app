@@ -91,12 +91,18 @@ export default function FeedModal({ open, chubbyId, onClose, onCreated }: FeedMo
         style={{ border: "1px solid var(--border-soft)", background: "var(--surface)" }}
       >
         <h2 className="mb-3 text-lg font-semibold">ごはん登録</h2>
+        <label className="mb-1 block text-sm font-medium">
+          ご飯の名前
+        </label>
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="ご飯の名前"
+          placeholder="ホイップドーナツ"
           className="mb-3 w-full rounded-md border border-black/20 px-3 py-2"
         />
+        <label className="mb-1 block text-sm font-medium">
+          食事の種類
+        </label>
         <select
           value={mealType}
           onChange={(e) => setMealType(e.target.value as MealType)}
@@ -108,16 +114,27 @@ export default function FeedModal({ open, chubbyId, onClose, onCreated }: FeedMo
             </option>
           ))}
         </select>
-        <input
-          type="number"
-          inputMode="numeric"
-          min="0"
-          step="1"
-          value={calories}
-          onChange={(e) => setCalories(e.target.value)}
-          placeholder="カロリー"
-          className="mb-3 w-full rounded-md border border-black/20 px-3 py-2"
-        />
+        <div className="mb-3">
+          <label className="mb-1 block text-sm font-medium">
+            カロリー
+          </label>
+          <div className="flex items-center rounded-md border border-black/20 px-3">
+            <input
+              type="number"
+              inputMode="numeric"
+              min="0"
+              step="1"
+              value={calories}
+              onChange={(e) => setCalories(e.target.value)}
+              placeholder="0"
+              className="w-full py-2 outline-none"
+            />
+            <span className="ml-2 text-sm text-black/60">kcal</span>
+          </div>
+        </div>
+        <label className="mb-1 block text-sm font-medium">
+          マスター
+        </label>
         <select
           value={fromWho}
           onChange={(e) => setFromWho(e.target.value)}
@@ -130,6 +147,9 @@ export default function FeedModal({ open, chubbyId, onClose, onCreated }: FeedMo
             </option>
           ))}
         </select>
+        <label className="mb-1 block text-sm font-medium">
+          日付
+        </label>
         <input
           type="date"
           value={date}

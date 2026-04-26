@@ -62,6 +62,9 @@ export default function MasterModal({ open, onClose, onCreated }: MasterModalPro
         <h2 className="mb-3 text-lg font-semibold">Master作成</h2>
 
         {/* 名前 */}
+        <label className="mb-1 block text-sm font-medium">
+          名前
+        </label>
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -70,6 +73,9 @@ export default function MasterModal({ open, onClose, onCreated }: MasterModalPro
         />
 
         {/* 性別 */}
+        <label className="mb-1 block text-sm font-medium">
+          性別
+        </label>
         <select
           value={sex}
           onChange={(e) => setSex(e.target.value)}
@@ -82,6 +88,9 @@ export default function MasterModal({ open, onClose, onCreated }: MasterModalPro
         </select>
 
         {/* 生年月日 */}
+        <label className="mb-1 block text-sm font-medium">
+          生年月日
+        </label>
         <input
           type="date"
           value={birthDay}
